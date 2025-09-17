@@ -2,7 +2,7 @@
 
 web site link frontend( https://storevisitdjangoproject-front-demo.onrender.com )
 
-web site link backend (  https://storevisitdjangoproject-backend-demo.onrender.com/admin/login/?next=/admin/)
+web site link backend ( [ https://storevisitdjangoproject-backend-demo.onrender.com/admin/login/?next=/admin/](https://stores-dango-visit-backend.onrender.com/admin/accounts/store/) )
 
 
 This is a **full-stack web application** built with:
