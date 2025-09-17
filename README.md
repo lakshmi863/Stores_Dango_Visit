@@ -1,6 +1,6 @@
 # Store Visit Django + React Project
 
-web site link frontend( https://storevisitdjangoproject-front-demo.onrender.com )
+web site link frontend( https://stores-dango-visit-demo-frontend.onrender.com )
 
 web site link backend ( [ https://storevisitdjangoproject-backend-demo.onrender.com/admin/login/?next=/admin/](https://stores-dango-visit-backend.onrender.com/admin/accounts/store/) )
 
