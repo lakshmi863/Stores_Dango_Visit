@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// --- 1. IMPORT THE `useMap` HOOK ---
 import { MapContainer, TileLayer, Marker, Popup, Circle, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -18,32 +17,27 @@ L.Icon.Default.mergeOptions({
     shadowUrl: markerShadow,
 });
 
-// Custom icons (no changes here)
+// Custom icon for all stores (we only need one now)
 const blueIcon = new L.Icon({
     iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
     iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
     iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
 });
-const greenIcon = new L.Icon({
-    iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-    iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
-});
 
-// --- 2. CREATE THE RE-CENTERING COMPONENT ---
-// This component will be placed inside the MapContainer.
-// It takes the new center coordinates and a zoom level as props.
+// Re-centering component (no changes here)
 function ChangeView({ center, zoom }) {
-  const map = useMap(); // Get the map instance
-  map.setView(center, zoom); // Tell the map to change its view
-  return null; // This component doesn't render anything itself
+  const map = useMap();
+  map.setView(center, zoom);
+  return null;
 }
-
 
 const LiveMap = () => {
     const [currentPosition, setCurrentPosition] = useState(null);
-    const [tasks, setTasks] = useState([]); 
+    
+    // --- CHANGE #1: RENAMED STATE FROM 'tasks' to 'stores' FOR CLARITY ---
+    const [stores, setStores] = useState([]); 
+    
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const navigate = useNavigate();
@@ -66,21 +60,23 @@ const LiveMap = () => {
         return () => navigator.geolocation.clearWatch(watchId);
     }, [loading]);
 
-    // Effect to fetch tasks (no changes here)
+    // Effect to fetch ALL assigned stores
     useEffect(() => {
-        const fetchTodaysTasks = async () => {
+        const fetchEmployeeStores = async () => {
             if (!token) { navigate('/login'); return; }
             try {
-                const response = await axios.get('https://stores-dango-visit-backend.onrender.com/accounts/tasks/today/', {
+                // --- CHANGE #2: API ENDPOINT IS NOW '/employee/stores/' ---
+                // This gets all stores linked to your employee profile.
+                const response = await axios.get('https://stores-dango-visit-backend.onrender.com/accounts/employee/stores/', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
-                setTasks(response.data || []);
+                setStores(response.data || []); // Update the new 'stores' state
             } catch (err) {
-                console.error("Failed to fetch tasks:", err);
-                setError('Could not load task data for the map.');
+                console.error("Failed to fetch stores:", err);
+                setError('Could not load store data for the map.');
             }
         };
-        fetchTodaysTasks();
+        fetchEmployeeStores();
     }, [token, navigate]);
 
     // Error and loading messages (no changes here)
@@ -109,7 +105,6 @@ const LiveMap = () => {
                 <div className="bg-white rounded-lg shadow-md h-[75vh]">
                     <MapContainer center={[currentPosition.lat, currentPosition.lng]} zoom={15} style={{ height: "100%", width: "100%" }}>
                         
-                        {/* --- 3. ADD THE ChangeView COMPONENT HERE --- */}
                         <ChangeView center={[currentPosition.lat, currentPosition.lng]} zoom={15} />
 
                         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; OpenStreetMap contributors' />
@@ -119,26 +114,22 @@ const LiveMap = () => {
                             <Popup>You are here (within {currentPosition.accuracy.toFixed(0)}m)</Popup>
                         </Marker>
 
-                        {/* Store Markers (no changes here) */}
-                        {tasks.map(task => {
-                            const isCompleted = task.status === 'completed';
-                            const iconToUse = isCompleted ? greenIcon : blueIcon;
-                            if (!task.store || !task.store.latitude || !task.store.longitude) {
+                        {/* --- CHANGE #3: MODIFIED THE .map() LOOP ---
+                            // It now loops over 'stores' instead of 'tasks' and accesses properties directly.
+                        */}
+                        {stores.map(store => {
+                            if (!store || !store.latitude || !store.longitude) {
                                 return null;
                             }
                             return (
                                 <Marker 
-                                    key={task.id} 
-                                    position={[task.store.latitude, task.store.longitude]}
-                                    icon={iconToUse}
+                                    key={store.store_id} 
+                                    position={[store.latitude, store.longitude]}
+                                    icon={blueIcon} // All stores use the same icon now
                                 >
                                     <Popup>
-                                        <div className="font-bold text-base">{task.store.store_information}</div>
-                                        {isCompleted ? (
-                                            <div className="text-green-600 font-semibold">Visit Complete</div>
-                                        ) : (
-                                            <div>Status: Pending</div>
-                                        )}
+                                        <div className="font-bold text-base">{store.store_information}</div>
+                                        <div>{store.location}</div>
                                     </Popup>
                                 </Marker>
                             );
