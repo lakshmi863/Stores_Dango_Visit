@@ -1,0 +1,11 @@
+Django>=4.1
+djangorestframework
+djangorestframework-simplejwt
+django-cors-headers
+gunicorn
+whitenoise
+dj-database-url
+psycopg2-binary
+python-decouple
+django-extensions
+geopy
