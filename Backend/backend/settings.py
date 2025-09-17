@@ -53,7 +53,7 @@ if DEBUG:
     CORS_ALLOWED_ORIGINS.append("http://localhost:3000")
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://storevisitdjangoproject-front-demo.onrender.com",
+    "https://stores-dango-visit-demo-frontend.onrender.com",
 ]
 
 ROOT_URLCONF = "backend.urls"
