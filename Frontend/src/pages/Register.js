@@ -17,7 +17,7 @@ function Register() {
     setSuccess("");
     try {
       // THIS URL IS NOW CORRECTED
-      await axios.post("http://127.0.0.1:8000/accounts/register/", {
+      await axios.post("https://stores-dango-visit-backend.onrender.com/accounts/register/", {
         name,
         email,
         password,

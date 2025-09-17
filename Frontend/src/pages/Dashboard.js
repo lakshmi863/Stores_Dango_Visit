@@ -13,7 +13,7 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchTodaysActivities = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/accounts/activities/today/', {
+                const response = await axios.get('https://stores-dango-visit-backend.onrender.com/accounts/activities/today/', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setActivities(response.data);

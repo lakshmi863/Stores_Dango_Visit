@@ -12,7 +12,7 @@ export default function DailyTasks() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await axios.get("http://127.0.0.1:8000/accounts/today-visits/", {
+        const res = await axios.get("https://stores-dango-visit-backend.onrender.com/accounts/today-visits/", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setTasks(res.data || []);
@@ -31,7 +31,7 @@ export default function DailyTasks() {
   const markArrived = async (taskId) => {
     try {
       const res = await axios.patch(
-        `http://127.0.0.1:8000/accounts/visits/${taskId}/arrive/`,
+        `https://stores-dango-visit-backend.onrender.com/accounts/visits/${taskId}/arrive/`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -51,7 +51,7 @@ export default function DailyTasks() {
 
     try {
       const res = await axios.patch(
-        `http://127.0.0.1:8000/accounts/visits/${taskId}/complete/`,
+        `https://stores-dango-visit-backend.onrender.com/accounts/visits/${taskId}/complete/`,
         { comments, issue },
         { headers: { Authorization: `Bearer ${token}` } }
       );

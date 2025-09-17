@@ -20,7 +20,7 @@ const Login = () => {
 
     try {
       // Your existing API call, now using your live URL
-      const res = await axios.post("http://127.0.0.1:8000/accounts/login/", {
+      const res = await axios.post("https://stores-dango-visit-backend.onrender.com/accounts/login/", {
         email,
         password,
       });

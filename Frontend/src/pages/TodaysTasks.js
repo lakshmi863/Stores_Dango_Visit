@@ -18,7 +18,7 @@ const TodaysTasks = () => {
             }
             try {
                 // Fetch data from the new API endpoint
-                const response = await axios.get('http://127.0.0.1:8000/accounts/tasks/today/', {
+                const response = await axios.get('https://stores-dango-visit-backend.onrender.com/accounts/tasks/today/', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setTasks(response.data);

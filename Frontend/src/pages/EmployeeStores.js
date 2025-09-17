@@ -11,7 +11,7 @@ export default function EmployeeStores() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await axios.get("http://127.0.0.1:8000/accounts/employee/stores/", {
+        const res = await axios.get("https://stores-dango-visit-backend.onrender.com/accounts/employee/stores/", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setStores(res.data || []);

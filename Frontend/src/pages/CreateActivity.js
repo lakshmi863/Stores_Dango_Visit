@@ -26,7 +26,7 @@ const CreateActivity = () => {
             if (!token) { navigate('/login'); return; }
             try {
                 // This is the new API endpoint. It gets all stores linked to the employee profile.
-                const res = await axios.get('http://127.0.0.1:8000/accounts/employee/stores/', {
+                const res = await axios.get('https://stores-dango-visit-backend.onrender.com/accounts/employee/stores/', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
 
@@ -72,7 +72,7 @@ const CreateActivity = () => {
                 try {
                     // The 'store' ID now comes from the 'selectedStore' state variable,
                     // which is controlled by the dropdown menu.
-                    await axios.post('http://127.0.0.1:8000/accounts/activities/create/', {
+                    await axios.post('https://stores-dango-visit-backend.onrender.com/accounts/activities/create/', {
                         store: selectedStore, 
                         remarks,
                         latitude,
