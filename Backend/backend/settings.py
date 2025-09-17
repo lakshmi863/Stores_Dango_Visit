@@ -11,6 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config("SECRET_KEY")
 DEBUG = config("DEBUG", default=False, cast=bool)
 
+# Corrected a minor typo from 12.0.0.1 to 127.0.0.1
 ALLOWED_HOSTS = [
     'storevisitdjangoproject-backend-demo.onrender.com',
     'localhost',
@@ -26,7 +27,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    "django.contrib.staticfiles", # This is required
+    "django.contrib.staticfiles",
     "rest_framework",
     "rest_framework_simplejwt",
     "corsheaders",
@@ -35,7 +36,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware", # Correctly placed
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -45,15 +46,19 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+# This is the primary fix for your CORS error
 CORS_ALLOWED_ORIGINS = [
     "https://storevisitdjangoproject-front-demo.onrender.com",
+    "https://stores-dango-visit-demo-frontend.onrender.com",  # <-- FIX: ADD THIS LINE
 ]
 CORS_ALLOW_CREDENTIALS = True
 if DEBUG:
     CORS_ALLOWED_ORIGINS.append("http://localhost:3000")
 
+# Kept this list consistent with the one above
 CSRF_TRUSTED_ORIGINS = [
     "https://stores-dango-visit-demo-frontend.onrender.com",
+    "https://storevisitdjangoproject-front-demo.onrender.com",  # <-- FIX: ADD THIS LINE TOO
 ]
 
 ROOT_URLCONF = "backend.urls"
@@ -91,16 +96,10 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 USE_TZ = True
 
-# --- STATIC FILES ---
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
-# --- THIS IS THE CRITICAL CHANGE FOR THE 500 ERROR ---
-# We are changing the storage backend to a simpler, more reliable one for production.
 STATICFILES_STORAGE = "whitenoise.storage.WhiteNoiseStorage"
-
-# --- END OF CRITICAL CHANGE ---
-
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
